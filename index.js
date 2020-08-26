@@ -142,7 +142,7 @@ function handleEvent(event) {
             "action": {
               "type": "uri",
               "label": "llif",
-              "uri": "https://58e001c0d6d3.ngrok.io/"
+              "uri": "https://llif.herokuapp.com/"
             }
           },
           {
