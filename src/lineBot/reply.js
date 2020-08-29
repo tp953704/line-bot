@@ -1,13 +1,17 @@
+const express = require("express");
+const router = express.Router();
 // linebot SDK
 const line = require('@line/bot-sdk');
-
 // create LINE SDK config from env variables
 const lineBotConfig = require('./lineBotConfig.js');
 
 // linebot client
 const client = new line.Client(lineBotConfig);
-// 預設flex
-module.exports = replyflex = {
+
+// lineBotApi
+const lineBotHttp = require('./lineBotHttp');
+
+const replyflex = {
     "type": "flex",
     "altText": "This is a Flex Message",
     "contents": {
@@ -126,17 +130,70 @@ module.exports = replyflex = {
     }
 };
 
-module.exports= function handleEvent(event,reply=replyflex) {
-    // if (event.type !== 'message' || event.message.type !== 'text') {
-    //   // ignore non-text-message event
-    //   return Promise.resolve(null);
-    // }
-  
-    // create a echoing text message
-    const echo = { type: 'text', text: event.message.text };
-   
+function handleEvent(event,reply=replyflex) {
     // use reply API
+    console.log(event)
+    const message = event.message;
+    const messageType = message.type; 
+    const messageText = message.text;
+    const userSource = event.source;
+    // 不適傳文字不理她
+    if(messageType !== "text"){
+      return Promise.resolve(null);
+    }
+    if(messageText.indexOf('對不起') > -1){
+      return lineBotHttp.del("https://7ac0997cefc6.ngrok.io/api/account/deleteDescribe",{"userLineId":userSource["userId"]})
+              .then((result)=>{
+                console.log(result);
+                if(result==="刪除成功"){
+                  
+                  return client.replyMessage(event.replyToken, { type: 'text', text: "好八，原諒你" });
+                }else{
+                  return client.replyMessage(event.replyToken, { type: 'text', text: "幹嘛道歉" });
+                }
+                
+              })
+    }
+    if(messageText==='小帥哥'){
+      return client.replyMessage(event.replyToken, reply);   
+    }
+    if(messageText.indexOf('醜') > -1){
+      
+      return lineBotHttp.post("https://7ac0997cefc6.ngrok.io/api/account/addDescribe",{ "userLineId":userSource["userId"],"describe":"醜八怪，不要講話"})
+            .then((result)=>{
+              return client.replyMessage(event.replyToken, { type: 'text', text: "你才醜" });
+            })
+      
+      // client.replyMessage(event.replyToken, { type: 'text', text: "你最醜，媽的" });
+    }else{
+      return lineBotHttp.post("https://7ac0997cefc6.ngrok.io/api/account/account",{ "userLineId":userSource["userId"]})
+              .then((result)=>{
+                const resultData = result.data || "";
+                console.log(resultData)
+                if(resultData.describe === ""){
+                  return Promise.resolve(null);
+                }
+                return client.replyMessage(event.replyToken, { type: 'text', text: "醜八怪，不要講話" });
+              })
+    }
     
-   
-    return client.replyMessage(event.replyToken, reply);
+    
 }
+
+// linebot
+router.post('/webhook', line.middleware(lineBotConfig), (req, res) => {
+  Promise
+    .all(req.body.events.map((item) => {      
+      handleEvent(item);
+    }))
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.error(1);
+      res.status(500).end();
+    });
+});
+// 預設flex
+module.exports = router;
+

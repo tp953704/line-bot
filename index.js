@@ -2,39 +2,39 @@
 
 
 const express = require('express');
-
 // create Express app
 // about Express itself: https://expressjs.com/
 const app = express();
-// linebot SDK
-const line = require('@line/bot-sdk');
+// line bot api
+const lineBot = require('./src/lineBot/reply');
 
-// create LINE SDK config from env variables
-const lineBotConfig = require('./src/lineBot/lineBotConfig.js');
-const handleEvent = require('./src/lineBot/reply.js');
-// import {
-//   lineBotConfig
-// } from './src/lineBot/lineBotConfig.js';
+app.use("/",lineBot);
 
-// import {
-//   handleEvent
-// } from './src/lineBot/reply';
 
-// linebot
-app.post('/webhook', line.middleware(lineBotConfig), (req, res) => {
+const mongoose = require("mongoose");
+const body_parser = require("body-parser");
+// 引入user.js
+const users = require("./src/db/routes/account");
+// DB config
+const url = require("./src/db/config/config").mongoURI;
 
-  Promise
-    .all(req.body.events.map((item) => {
-      handleEvent(item);
-    }))
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.error(1);
-      res.status(500).end();
-    });
-});
+// 可傳JSON
+// app.use(body_parser.json());
+// 可傳urllencode
+
+app.use(body_parser.urlencoded({extended:false}))
+app.use(body_parser.json())
+// connect to monogodb
+mongoose.connect(url, {
+  useNewUrlParser: true,
+  useUnifiedTopology:true
+}).then(()=>{
+    console.log("connect")
+}).catch((err)=>{
+    console.log(err)
+})
+// 使用account
+app.use("/api/account",users)
 
 
 // listen on port
