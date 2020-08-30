@@ -132,7 +132,7 @@ const replyflex = {
 
 function handleEvent(event,reply=replyflex) {
     // use reply API
-    console.log(event)
+    // console.log(event)
     const message = event.message;
     const messageType = message.type; 
     const messageText = message.text;
@@ -142,7 +142,7 @@ function handleEvent(event,reply=replyflex) {
       return Promise.resolve(null);
     }
     if(messageText.indexOf('對不起') > -1){
-      return lineBotHttp.del("https://7ac0997cefc6.ngrok.io/api/account/deleteDescribe",{"userLineId":userSource["userId"]})
+      return lineBotHttp.del("https://linebotwang.herokuapp.com/api/account/deleteDescribe",{"userLineId":userSource["userId"]})
               .then((result)=>{
                 console.log(result);
                 if(result==="刪除成功"){
@@ -159,17 +159,17 @@ function handleEvent(event,reply=replyflex) {
     }
     if(messageText.indexOf('醜') > -1){
       
-      return lineBotHttp.post("https://7ac0997cefc6.ngrok.io/api/account/addDescribe",{ "userLineId":userSource["userId"],"describe":"醜八怪，不要講話"})
+      return lineBotHttp.post("https://linebotwang.herokuapp.com/api/account/addDescribe",{ "userLineId":userSource["userId"],"describe":"醜八怪，不要講話"})
             .then((result)=>{
               return client.replyMessage(event.replyToken, { type: 'text', text: "你才醜" });
             })
       
       // client.replyMessage(event.replyToken, { type: 'text', text: "你最醜，媽的" });
     }else{
-      return lineBotHttp.post("https://7ac0997cefc6.ngrok.io/api/account/account",{ "userLineId":userSource["userId"]})
+      return lineBotHttp.post("https://linebotwang.herokuapp.com/api/account/account",{ "userLineId":userSource["userId"]})
               .then((result)=>{
                 const resultData = result.data || "";
-                console.log(resultData)
+                // console.log(resultData)
                 if(resultData.describe === ""){
                   return Promise.resolve(null);
                 }

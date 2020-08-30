@@ -39,7 +39,6 @@ router.post("/addDescribe",(req,res)=>{
         })
 })
 router.delete("/deleteDescribe",(req,res)=>{
-    console.log(req.body)
     User.deleteOne({userLineId:req.body.userLineId})
         .then((user) => {
             
