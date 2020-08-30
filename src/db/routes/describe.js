@@ -6,7 +6,7 @@ const User = require("../models/addDescribe");
 // $router Get api/Describe/addDescribe
 // @desc  返回的請求的json數據
 // @accsess public
-router.get("/hasDescribe",(req,res)=>{
+router.get("/get",(req,res)=>{
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
             if(user){
@@ -20,7 +20,7 @@ router.get("/hasDescribe",(req,res)=>{
 // $router Post api/Describe/addDescribe
 // @desc 返回的請求的JSON數據
 // @access publce
-router.post("/addDescribe",(req,res)=>{
+router.post("/post",(req,res)=>{
     
     // 查詢是否擁有郵件
     User.findOne({userLineId:req.body.userLineId})
@@ -39,7 +39,7 @@ router.post("/addDescribe",(req,res)=>{
             }
         })
 })
-router.delete("/deleteDescribe",(req,res)=>{
+router.delete("/delete",(req,res)=>{
     User.deleteOne({userLineId:req.body.userLineId})
         .then((user) => {
             
