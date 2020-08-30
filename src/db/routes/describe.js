@@ -3,21 +3,23 @@ const router = express.Router();
 // const keys = require("../config/config");
 // schema
 const User = require("../models/describe");
-// $router Get api/Describe/addDescribe
+// $router Get api/describe/get
 // @desc  返回的請求的json數據
 // @accsess public
 router.get("/get",(req,res)=>{
+    console.log(req)
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
+            console.log(3)
             if(user){
                 return res.json(user);
             }else{
-                return res.status(400).json({userLineId:""})
+                return res.json("")
             }
         })
         
 })
-// $router Post api/Describe/addDescribe
+// $router Post api/Describe/post
 // @desc 返回的請求的JSON數據
 // @access publce
 router.post("/post",(req,res)=>{
@@ -40,15 +42,18 @@ router.post("/post",(req,res)=>{
         })
 })
 router.delete("/delete",(req,res)=>{
-    User.deleteOne({userLineId:req.body.userLineId})
-        .then((user) => {
-            
-            if(user.deletedCount>0){
-                return res.json("刪除成功")
-            }else{
-                return res.json("刪除失敗")
+    console.log(req.body)
+    User.findOneAndDelete(req.body,{},
+        function(error) {
+            if (error) {
+              console.log(error);
+            } else {
+                res.json("刪除成功");
             }
-        })
+        }
+    )
+   
+
 })
 
 module.exports = router;

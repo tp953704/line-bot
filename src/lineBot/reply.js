@@ -157,7 +157,6 @@ function handleEvent(event,reply=replyflex) {
       return client.replyMessage(event.replyToken, reply);   
     }
     if(messageText.indexOf('醜') > -1){
-      
       return lineBotHttp.post("https://linebotwang.herokuapp.com/api/describe/post",{ "userLineId":userSource["userId"],"describe":"醜八怪，不要講話"})
             .then((result)=>{
               return client.replyMessage(event.replyToken, { type: 'text', text: "你才醜" });
@@ -165,11 +164,12 @@ function handleEvent(event,reply=replyflex) {
       
       // client.replyMessage(event.replyToken, { type: 'text', text: "你最醜，媽的" });
     }else{
-      return lineBotHttp.get("https://linebotwang.herokuapp.com/api/describe/get",{ "userLineId":userSource["userId"]})
+      console.log(1)
+      return lineBotHttp.get("https://linebotwang.herokuapp.com/api/describe/get",{"userLineId":userSource["userId"]})
               .then((result)=>{
+                console.log(result.data)
                 const resultData = result.data || "";
-                // console.log(resultData)
-                if(resultData.describe === ""){
+                if(resultData === ""){
                   return Promise.resolve(null);
                 }
                 return client.replyMessage(event.replyToken, { type: 'text', text: "醜八怪，不要講話" });
