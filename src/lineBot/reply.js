@@ -165,7 +165,7 @@ function handleEvent(event,reply=replyflex) {
       // client.replyMessage(event.replyToken, { type: 'text', text: "你最醜，媽的" });
     }else{
       console.log(1)
-      return lineBotHttp.get("https://linebotwang.herokuapp.com/api/describe/get",{"userLineId":userSource["userId"]})
+      return lineBotHttp.post("https://linebotwang.herokuapp.com/api/describe/hasDescribe",{"userLineId":userSource["userId"]})
               .then((result)=>{
                 console.log(result.data)
                 const resultData = result.data || "";

@@ -6,7 +6,7 @@ const User = require("../models/describe");
 // $router Get api/describe/get
 // @desc  返回的請求的json數據
 // @accsess public
-router.get("/get",(req,res)=>{
+router.post("/hasDescribe",(req,res)=>{
     console.log(req)
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
