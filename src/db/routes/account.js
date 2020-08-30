@@ -21,6 +21,7 @@ router.post("/account",(req,res)=>{
 // @desc 返回的請求的JSON數據
 // @access publce
 router.post("/addDescribe",(req,res)=>{
+    
     // 查詢是否擁有郵件
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {

@@ -28,14 +28,14 @@ function post(url, data = {}) {
 }
 
 function del(url, delData = {}) {
-    console.log(delData)
+    
     return new Promise((resolve, reject) => {
         Axios.delete(url,delData).then(
             (response) => {
                 resolve(response.data);
             },
             (err) => {
-                console.log(2)
+                
                 reject(err);
             }
         );
