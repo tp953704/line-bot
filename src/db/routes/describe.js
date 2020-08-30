@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 // const keys = require("../config/config");
 // schema
-const User = require("../models/addDescribe");
+const User = require("../models/describe");
 // $router Get api/Describe/addDescribe
 // @desc  返回的請求的json數據
 // @accsess public
