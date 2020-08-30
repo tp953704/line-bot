@@ -10,7 +10,6 @@ router.get("/get",(req,res)=>{
     console.log(req)
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
-            console.log(3)
             if(user){
                 return res.json(user);
             }else{
