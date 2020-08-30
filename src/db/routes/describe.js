@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 // const keys = require("../config/config");
 // schema
-const User = require("../models/account");
-// $router Get api/account/account
+const User = require("../models/addDescribe");
+// $router Get api/Describe/addDescribe
 // @desc  返回的請求的json數據
 // @accsess public
-router.post("/account",(req,res)=>{
+router.get("/hasDescribe",(req,res)=>{
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
             if(user){
@@ -17,7 +17,7 @@ router.post("/account",(req,res)=>{
         })
         
 })
-// $router Post api/account/register
+// $router Post api/Describe/addDescribe
 // @desc 返回的請求的JSON數據
 // @access publce
 router.post("/addDescribe",(req,res)=>{

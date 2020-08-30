@@ -14,7 +14,7 @@ app.use("/",lineBot);
 const mongoose = require("mongoose");
 const body_parser = require("body-parser");
 // 引入user.js
-const users = require("./src/db/routes/account");
+const users = require("./src/db/routes/describe");
 // DB config
 
 const url = require("./src/db/config/config").mongoURI;
@@ -34,8 +34,8 @@ mongoose.connect(url, {
 }).catch((err)=>{
     console.log(err)
 })
-// 使用account
-app.use("/api/account",users)
+// 使用describe
+app.use("/api/describe",users)
 
 
 // listen on port
