@@ -30,7 +30,7 @@ function post(url, data = {}) {
 function del(url, delData = {}) {
     
     return new Promise((resolve, reject) => {
-        Axios.delete(url,delData).then(
+        Axios.delete(url,{data:delData}).then(
             (response) => {
                 resolve(response.data);
             },
