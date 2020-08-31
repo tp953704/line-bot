@@ -1,8 +1,16 @@
-const express = require("express");
-const router = express.Router();
-// const keys = require("../config/config");
+import { Router } from "express";
 // schema
-const User = require("../models/describe");
+import { User } from "../models/describe";
+
+type typeOfUser = {
+    userLineId : string,
+    describe : string,
+    creatDate? : string
+}
+
+const router = Router();
+
+
 // $router Get api/describe/get
 // @desc  返回的請求的json數據
 // @accsess public
@@ -10,7 +18,6 @@ router.post("/hasDescribe",(req,res)=>{
     console.log(req.body)
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
-            console.log(user)
             if(user){
                 return res.json(user);
             }else{
@@ -34,15 +41,13 @@ router.post("/post",(req,res)=>{
                     userLineId:req.body.userLineId,
                     describe:req.body.describe
                 })
-                
-                        newUser.save()
-                                .then(user=>res.json(user))
-                                .catch(err => console.log(err))
+                newUser.save()
+                        .then(user=>res.json(user))
+                        .catch(err => console.log(err))
             }
         })
 })
 router.delete("/delete",(req,res)=>{
-    console.log(req.body)
     User.findOneAndDelete(req.body,{},
         function(error) {
             if (error) {
@@ -56,4 +61,4 @@ router.delete("/delete",(req,res)=>{
 
 })
 
-module.exports = router;
+export default router;

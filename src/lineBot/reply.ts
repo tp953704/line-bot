@@ -1,15 +1,15 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
 // linebot SDK
-const line = require('@line/bot-sdk');
+import { Client ,middleware} from '@line/bot-sdk';
 // create LINE SDK config from env variables
-const lineBotConfig = require('./lineBotConfig.js');
-
+import { lineBotConfig } from './lineBotConfig.js';
+import { lineBotHttp } from './lineBotHttp';
+const router = express.Router();
 // linebot client
-const client = new line.Client(lineBotConfig);
+const client = new Client(lineBotConfig);
 
 // lineBotApi
-const lineBotHttp = require('./lineBotHttp');
+
 
 const replyflex = {
     "type": "flex",
@@ -168,7 +168,6 @@ async function handleEvent(event,reply=replyflex) {
       console.log(1)
       try {
         const result_2 = await lineBotHttp.post(`${process.env.BASE_URL}/api/describe/hasDescribe`, { "userLineId": userSource["userId"] });
-        console.log(result_2.data);
         const resultData = result_2.data || "";
         if (resultData === "") {
           return Promise.resolve(null);
@@ -184,9 +183,9 @@ async function handleEvent(event,reply=replyflex) {
 }
 
 // linebot
-router.post('/webhook', line.middleware(lineBotConfig), (req, res) => {
+router.post('/webhook', middleware(lineBotConfig), (req, res) => {
   Promise
-    .all(req.body.events.map((item) => {      
+    .all(req.body.events.map((item:Event) => {      
       handleEvent(item);
     }))
     .then((result) => {
@@ -197,6 +196,6 @@ router.post('/webhook', line.middleware(lineBotConfig), (req, res) => {
       res.status(500).end();
     });
 });
-// 預設flex
-module.exports = router;
+
+export default router;
 

@@ -1,6 +1,6 @@
-const Axios = require("axios");
+import Axios from 'axios';
 
-function get(url, params = {}) {
+function get(url:string, params = {}) {
     return new Promise((resolve, reject) => {
         Axios.get(url, {
             params: params,
@@ -14,7 +14,7 @@ function get(url, params = {}) {
     });
 }
 // todo: 離線版判斷
-function post(url, data = {}) {
+function post(url:string, data = {}) {
     return new Promise((resolve, reject) => {
         Axios.post(url, data).then(
             (response) => {
@@ -27,7 +27,7 @@ function post(url, data = {}) {
     });
 }
 
-function del(url, delData = {}) {
+function del(url:string, delData = {}) {
     
     return new Promise((resolve, reject) => {
         Axios.delete(url,{data:delData}).then(
@@ -42,7 +42,7 @@ function del(url, delData = {}) {
     });
 }
 
-function put(url, data = {}) {
+function put(url:string, data = {}) {
     return new Promise((resolve, reject) => {
         Axios.put(url, data).then(
             (response) => {
@@ -55,7 +55,7 @@ function put(url, data = {}) {
     });
 }
 
-module.exports = {
+export const lineBotHttp = {
     get,
     post,
     del,
