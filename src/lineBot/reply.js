@@ -130,7 +130,7 @@ const replyflex = {
     }
 };
 
-function handleEvent(event,reply=replyflex) {
+async function handleEvent(event,reply=replyflex) {
     // use reply API
     // console.log(event)
     const message = event.message;
@@ -142,38 +142,42 @@ function handleEvent(event,reply=replyflex) {
       return Promise.resolve(null);
     }
     if(messageText.indexOf('對不起') > -1){
-      return lineBotHttp.del("https://linebotwang.herokuapp.com/api/describe/delete",{"userLineId":userSource["userId"]})
-              .then((result)=>{
-                if(result==="刪除成功"){
-                  
-                  return client.replyMessage(event.replyToken, { type: 'text', text: "好八，原諒你" });
-                }else{
-                  return client.replyMessage(event.replyToken, { type: 'text', text: "幹嘛道歉" });
-                }
-                
-              })
+      const result = await lineBotHttp.del(`${process.env.BASE_URL}/api/describe/delete`, { "userLineId": userSource["userId"] });
+      if (result === "刪除成功") {
+
+        return client.replyMessage(event.replyToken, { type: 'text', text: "好八，原諒你" });
+      }
+      else {
+        return client.replyMessage(event.replyToken, { type: 'text', text: "幹嘛道歉" });
+      }
     }
     if(messageText==='小帥哥'){
       return client.replyMessage(event.replyToken, reply);   
     }
     if(messageText.indexOf('醜') > -1){
-      return lineBotHttp.post("https://linebotwang.herokuapp.com/api/describe/post",{ "userLineId":userSource["userId"],"describe":"醜八怪，不要講話"})
-            .then((result)=>{
-              return client.replyMessage(event.replyToken, { type: 'text', text: "你才醜" });
-            }).catch(error => console.log(error.message));
+      try {
+        const result_1 = await lineBotHttp.post(`${process.env.BASE_URL}/api/describe/post`, { "userLineId": userSource["userId"], "describe": "醜八怪，不要講話" });
+        return client.replyMessage(event.replyToken, { type: 'text', text: "你才醜" });
+      }
+      catch (error) {
+        return console.log(error.message);
+      }
       
       // client.replyMessage(event.replyToken, { type: 'text', text: "你最醜，媽的" });
     }else{
       console.log(1)
-      return lineBotHttp.post("https://linebotwang.herokuapp.com/api/describe/hasDescribe",{"userLineId":userSource["userId"]})
-              .then((result)=>{
-                console.log(result.data)
-                const resultData = result.data || "";
-                if(resultData === ""){
-                  return Promise.resolve(null);
-                }
-                return client.replyMessage(event.replyToken, { type: 'text', text: "醜八怪，不要講話" });
-              }).catch(error => console.log(error.message));
+      try {
+        const result_2 = await lineBotHttp.post(`${process.env.BASE_URL}/api/describe/hasDescribe`, { "userLineId": userSource["userId"] });
+        console.log(result_2.data);
+        const resultData = result_2.data || "";
+        if (resultData === "") {
+          return Promise.resolve(null);
+        }
+        return client.replyMessage(event.replyToken, { type: 'text', text: "醜八怪，不要講話" });
+      }
+      catch (error_1) {
+        return console.log(error_1.message);
+      }
     }
     
     

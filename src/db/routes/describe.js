@@ -7,9 +7,10 @@ const User = require("../models/describe");
 // @desc  返回的請求的json數據
 // @accsess public
 router.post("/hasDescribe",(req,res)=>{
-    console.log(req)
+    console.log(req.body)
     User.findOne({userLineId:req.body.userLineId})
         .then((user) => {
+            console.log(user)
             if(user){
                 return res.json(user);
             }else{

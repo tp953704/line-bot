@@ -36,7 +36,8 @@ mongoose.connect(url, {
 })
 // 使用describe
 app.use("/api/describe",users)
-
+const env = require('dotenv');
+console.log(env)
 
 // listen on port
 const port = process.env.PORT || 3000;
